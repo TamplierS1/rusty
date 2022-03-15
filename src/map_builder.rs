@@ -8,8 +8,8 @@ const MAX_ROOM_SIZE: i32 = 10;
 
 pub struct MapBuilder {
     pub map: Map,
+    pub player_pos: Point,
     rooms: Vec<Rect>,
-    player_pos: Point,
 }
 
 impl MapBuilder {
@@ -26,8 +26,8 @@ impl MapBuilder {
 
         let room = mb.rooms.last().unwrap();
         mb.player_pos = Point {
-            x: room.x2 + (room.x2 - room.x1) / 2,
-            y: room.y2 + (room.y2 - room.y1) / 2,
+            x: room.x1 + (room.x2 - room.x1) / 2,
+            y: room.y1 + (room.y2 - room.y1) / 2,
         };
         mb
     }
@@ -81,6 +81,7 @@ impl MapBuilder {
     fn carve_corridors(&mut self) {
         let rooms = self.rooms.clone();
         for (i, room) in rooms.iter().enumerate() {
+            // TODO: this can be replaced with skip(len-1)
             if i == rooms.len() - 1 {
                 return;
             }
@@ -89,6 +90,7 @@ impl MapBuilder {
     }
 
     fn connect_rooms(&mut self, room1: Rect, room2: Rect) {
+        // TODO: replace all manual center calculations with Rect::center().
         let center1 = Point {
             x: room1.x1 + (room1.x2 - room1.x1) / 2,
             y: room1.y1 + (room1.y2 - room1.y1) / 2,
@@ -136,8 +138,4 @@ impl MapBuilder {
     fn carve_xy(&mut self, x: i32, y: i32) {
         self.map.tiles[map_idx(Point { x, y })] = TileType::Floor;
     }
-}
-
-fn out_of_bounds(pos: Point) -> bool {
-    pos.x >= SCREEN_WIDTH || pos.y >= SCREEN_HEIGHT || pos.x <= 0 || pos.y <= 0
 }

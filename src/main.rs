@@ -1,5 +1,6 @@
 mod map;
 mod map_builder;
+mod player;
 
 mod prelude {
     pub use bracket_lib::prelude::*;
@@ -7,12 +8,14 @@ mod prelude {
     pub const SCREEN_HEIGHT: i32 = 50;
     pub use crate::map::*;
     pub use crate::map_builder::*;
+    pub use crate::player::*;
 }
 
 use prelude::*;
 
 struct State {
     map: Map,
+    player: Player,
 }
 
 impl State {
@@ -20,14 +23,18 @@ impl State {
         let mb = MapBuilder::new();
         Self {
             map: mb.map,
+            player: Player::new(mb.player_pos),
         }
     }
 }
 
 impl GameState for State {
     fn tick(&mut self, ctx: &mut BTerm) {
+        self.player.update(ctx, &self.map);
+
         ctx.cls();
         self.map.render(ctx);
+        self.player.render(ctx);
     }
 }
 
