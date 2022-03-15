@@ -9,7 +9,7 @@ A dungeon crawler with procedurally generated levels, monsters of increasing dif
 
 ## MVP
 
-1. Create a basic dungeon map.
+1. ~~Create a basic dungeon map~~.
 2. Place the player and let them walk around. 
 3. Spawn monsters and let the player kill them by walking into them.
 4. Add health and a combat system that uses it.
@@ -26,3 +26,7 @@ A dungeon crawler with procedurally generated levels, monsters of increasing dif
    1. Add bosses.
 5. Add items: weapons, armor, potions.
 6. Add multiple floors and place the Amulet on the last one.
+
+## Dependencies
+
+- [bracket-lib](https://github.com/amethyst/bracket-lib) - The Roguelike Toolkit (RLTK), implemented for Rust.  
