@@ -10,7 +10,7 @@ A dungeon crawler with procedurally generated levels, monsters of increasing dif
 ## MVP
 
 1. ~~Create a basic dungeon map~~.
-2. Place the player and let them walk around. 
+2. ~~Place the player and let them walk around~~. 
 3. Spawn monsters and let the player kill them by walking into them.
 4. Add health and a combat system that uses it.
 5. Add healing potions.
