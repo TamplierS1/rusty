@@ -19,12 +19,28 @@ impl Map {
         }
     }
 
-    pub fn render(&self, ctx: &mut BTerm) {
+    pub fn render(&self, ctx: &mut BTerm, camera: &Camera) {
         for y in 0..SCREEN_HEIGHT {
             for x in 0..SCREEN_WIDTH {
+                if out_of_bounds(Point { x, y }) {
+                    continue;
+                }
+
                 match self.tiles[map_idx(Point { x, y })] {
-                    TileType::Wall => ctx.set(x, y, DARKGREY, BLACK, to_cp437('#')),
-                    TileType::Floor => ctx.set(x, y, BLACK, BLACK, to_cp437(' ')),
+                    TileType::Wall => ctx.set(
+                        x - camera.left_x,
+                        y - camera.top_y,
+                        DARKGREY,
+                        BLACK,
+                        to_cp437('#'),
+                    ),
+                    TileType::Floor => ctx.set(
+                        x - camera.left_x,
+                        y - camera.top_y,
+                        BLACK,
+                        BLACK,
+                        to_cp437(' '),
+                    ),
                 }
             }
         }

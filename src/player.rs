@@ -9,8 +9,14 @@ impl Player {
         Self { pos }
     }
 
-    pub fn render(&self, ctx: &mut BTerm) {
-        ctx.set(self.pos.x, self.pos.y, WHITE, BLACK, to_cp437('@'));
+    pub fn render(&self, ctx: &mut BTerm, camera: &Camera) {
+        ctx.set(
+            self.pos.x - camera.left_x,
+            self.pos.y - camera.top_y,
+            WHITE,
+            BLACK,
+            to_cp437('@'),
+        );
     }
 
     pub fn update(&mut self, ctx: &mut BTerm, map: &Map) {

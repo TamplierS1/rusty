@@ -41,8 +41,8 @@ impl MapBuilder {
 
         for _i in 0..ROOM_ATTEMPTS {
             let pos = Point {
-                x: rng.range(1, SCREEN_WIDTH - 1),
-                y: rng.range(1, SCREEN_HEIGHT - 1),
+                x: rng.range(2, SCREEN_WIDTH - 1),
+                y: rng.range(2, SCREEN_HEIGHT - 1),
             };
             let size = Point {
                 x: rng.range(MIN_ROOM_SIZE, MAX_ROOM_SIZE),
