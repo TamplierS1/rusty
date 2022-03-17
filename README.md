@@ -29,4 +29,5 @@ A dungeon crawler with procedurally generated levels, monsters of increasing dif
 
 ## Dependencies
 
-- [bracket-lib](https://github.com/amethyst/bracket-lib) - The Roguelike Toolkit (RLTK), implemented for Rust.  
+- [bracket-lib](https://github.com/amethyst/bracket-lib) - The Roguelike Toolkit (RLTK), implemented for Rust.
+- [legion](https://github.com/amethyst/legion) - High performance Rust ECS library.
