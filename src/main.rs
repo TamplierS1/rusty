@@ -37,6 +37,19 @@ impl State {
 
         let mut res = Resources::default();
         let map_builder = MapBuilder::new();
+
+        spawn_player(&mut ecs, map_builder.player_pos);
+        map_builder
+            .rooms
+            .iter()
+            .for_each(|room| {
+                // Skip the player room.
+                if room.center() == map_builder.player_pos {
+                    return;
+                }
+                spawn_monster(&mut ecs, room.center())
+            });
+
         res.insert(map_builder.map);
         res.insert(Camera::new(
             map_builder.player_pos,
@@ -45,8 +58,6 @@ impl State {
                 y: SCREEN_HEIGHT,
             },
         ));
-
-        spawn_player(&mut ecs, map_builder.player_pos);
 
         Self {
             ecs,

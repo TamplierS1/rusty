@@ -9,7 +9,7 @@ const MAX_ROOM_SIZE: i32 = 10;
 pub struct MapBuilder {
     pub map: Map,
     pub player_pos: Point,
-    rooms: Vec<Rect>,
+    pub rooms: Vec<Rect>,
 }
 
 impl MapBuilder {
