@@ -4,6 +4,7 @@ mod map;
 mod map_builder;
 mod spawner;
 mod systems;
+mod turn_state;
 
 mod prelude {
     pub use bracket_lib::prelude::*;
@@ -21,6 +22,7 @@ mod prelude {
     pub use crate::map_builder::*;
     pub use crate::spawner::*;
     pub use crate::systems::*;
+    pub use crate::turn_state::*;
 }
 
 use prelude::*;
@@ -28,7 +30,9 @@ use prelude::*;
 struct State {
     ecs: World,
     res: Resources,
-    systems: Schedule,
+    input_systems: Schedule,
+    player_systems: Schedule,
+    monster_systems: Schedule,
 }
 
 impl State {
@@ -58,11 +62,14 @@ impl State {
                 y: SCREEN_HEIGHT,
             },
         ));
+        res.insert(TurnState::AwaitingInput);
 
         Self {
             ecs,
             res,
-            systems: build_scheduler(),
+            input_systems: build_input_scheduler(),
+            player_systems: build_player_scheduler(),
+            monster_systems: build_monster_scheduler(),
         }
     }
 }
@@ -72,8 +79,23 @@ impl GameState for State {
         ctx.cls();
 
         self.res.insert(ctx.key);
-        self.systems
-            .execute(&mut self.ecs, &mut self.res);
+
+        let current_state = self
+            .res
+            .get::<TurnState>()
+            .unwrap()
+            .clone();
+        match current_state {
+            TurnState::AwaitingInput => self
+                .input_systems
+                .execute(&mut self.ecs, &mut self.res),
+            TurnState::PlayerTurn => self
+                .player_systems
+                .execute(&mut self.ecs, &mut self.res),
+            TurnState::MonsterTurn => self
+                .monster_systems
+                .execute(&mut self.ecs, &mut self.res),
+        }
 
         render_draw_buffer(ctx).expect("Error: render error.");
     }
