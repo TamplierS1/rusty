@@ -77,6 +77,9 @@ impl State {
 impl GameState for State {
     fn tick(&mut self, ctx: &mut BTerm) {
         ctx.cls();
+        ctx.set_active_console(1);
+        ctx.cls();
+        ctx.set_active_console(0);
 
         self.res.insert(ctx.key);
 
@@ -113,7 +116,12 @@ fn main() -> BError {
         .with_title("rusty")
         .with_fps_cap(60.0)
         .with_tile_dimensions(TILE_SIZE, TILE_SIZE)
+        .with_font("terminal8x8.png", 8, 8)
+        .with_sparse_console(SCREEN_WIDTH, SCREEN_HEIGHT, "terminal8x8.png")
         .build()?;
+
+    register_palette_color("red", RGB::named(RED));
+    register_palette_color("white", RGB::named(WHITE));
 
     main_loop(context, State::new())
 }
