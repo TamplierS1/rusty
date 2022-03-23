@@ -29,5 +29,4 @@ pub struct Health {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-#[repr(transparent)]
 pub struct Name(pub String);

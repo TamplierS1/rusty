@@ -80,6 +80,8 @@ impl GameState for State {
         ctx.set_active_console(1);
         ctx.cls();
         ctx.set_active_console(0);
+        
+        self.res.insert(Point::from_tuple(ctx.mouse_pos()));
 
         self.res.insert(ctx.key);
 
