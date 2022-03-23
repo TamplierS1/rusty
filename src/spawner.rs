@@ -16,12 +16,11 @@ pub fn spawn_player(ecs: &mut World, pos: Point) {
 }
 
 pub fn spawn_monster(ecs: &mut World, pos: Point) {
-    let enemy_type = RandomNumberGenerator::new().range::<i32>(0, 4);
-    let glyph = match enemy_type {
-        0 => to_cp437('E'),
-        1 => to_cp437('O'),
-        2 => to_cp437('o'),
-        _ => to_cp437('g'),
+    let (health, name, glyph) = match RandomNumberGenerator::new().roll_dice(1, 20) {
+        1..=12 => goblin(),
+        13..=17 => orc(),
+        18..=19 => ogre(),
+        _ => ettin(),
     };
 
     ecs.push((
@@ -32,20 +31,26 @@ pub fn spawn_monster(ecs: &mut World, pos: Point) {
             glyph,
         },
         MovingRandomly,
-        match enemy_type {
-            0 => Health {
-                current: 30,
-                max: 30,
-            },
-            1 => Health {
-                current: 17,
-                max: 17,
-            },
-            2 => Health {
-                current: 10,
-                max: 10,
-            },
-            _ => Health { current: 6, max: 6 },
+        Health {
+            current: health,
+            max: health,
         },
+        Name(name),
     ));
+}
+
+fn goblin() -> (i32, String, FontCharType) {
+    (1, "Goblin".to_string(), to_cp437('g'))
+}
+
+fn orc() -> (i32, String, FontCharType) {
+    (2, "Orc".to_string(), to_cp437('o'))
+}
+
+fn ogre() -> (i32, String, FontCharType) {
+    (6, "Ogre".to_string(), to_cp437('O'))
+}
+
+fn ettin() -> (i32, String, FontCharType) {
+    (13, "Ettin".to_string(), to_cp437('E'))
 }
