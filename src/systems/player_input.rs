@@ -19,19 +19,37 @@ pub fn player_input(
         };
 
         if direction != Point::zero() {
-            <(Entity, &Point)>::query()
+            let (player_entity, destination) = <(Entity, &Point)>::query()
                 .filter(component::<Player>())
                 .iter(ecs)
-                .for_each(|(entity, pos)| {
+                .find_map(|(entity, pos)| Some((*entity, *pos + direction)))
+                .unwrap();
+
+            let mut attacked = false;
+            <(Entity, &Point)>::query()
+                .filter(component::<Enemy>())
+                .iter(ecs)
+                .filter(|(_, pos)| destination == **pos)
+                .for_each(|(entity, _)| {
                     commands.push((
                         (),
-                        WantsToMove {
-                            entity: *entity,
-                            destination: *pos + direction,
+                        WantsToAttack {
+                            attacker: player_entity,
+                            victim: *entity,
                         },
                     ));
+                    attacked = true;
                 });
 
+            if !attacked {
+                commands.push((
+                    (),
+                    WantsToMove {
+                        entity: player_entity,
+                        destination,
+                    },
+                ));
+            }
             *turn_state = TurnState::PlayerTurn;
         }
     }
